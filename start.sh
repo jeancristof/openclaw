@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# Créer le dossier avec bonnes permissions
-mkdir -p /data/.openclaw
-chown -R node:node /data/.openclaw
+# Supprimer l'ancien fichier problématique
+rm -rf /data/.openclaw
 
-# Écrire la config en tant que node
-su node -c 'cat > /data/.openclaw/openclaw.json << CONFIG
+# Créer config dans le home directory de node (permissions correctes)
+mkdir -p /home/node/.openclaw
+cat > /home/node/.openclaw/openclaw.json << 'CONFIG'
 {
   "gateway": {
     "mode": "local"
@@ -18,7 +18,9 @@ su node -c 'cat > /data/.openclaw/openclaw.json << CONFIG
     }
   }
 }
-CONFIG'
+CONFIG
 
-# Démarrer OpenClaw
-exec su node -c "npx openclaw start --gateway"
+chown -R node:node /home/node/.openclaw
+
+# Démarrer
+exec npx openclaw start --gateway
