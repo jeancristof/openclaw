@@ -1,7 +1,6 @@
 #!/bin/bash
 
-# Ignorer /data, utiliser uniquement /home/node
-export HOME=/home/node
+# Config dans home node
 mkdir -p /home/node/.openclaw
 cat > /home/node/.openclaw/openclaw.json << 'CONFIG'
 {
@@ -20,5 +19,5 @@ CONFIG
 
 chown -R node:node /home/node/.openclaw
 
-# Démarrer en tant que node
-exec su node -c "npx openclaw start --gateway"
+# Démarrer directement
+exec npx openclaw start --gateway
