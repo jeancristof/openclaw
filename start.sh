@@ -1,9 +1,7 @@
 #!/bin/bash
 
-# Supprimer l'ancien fichier problématique
-rm -rf /data/.openclaw
-
-# Créer config dans le home directory de node (permissions correctes)
+# Ignorer /data, utiliser uniquement /home/node
+export HOME=/home/node
 mkdir -p /home/node/.openclaw
 cat > /home/node/.openclaw/openclaw.json << 'CONFIG'
 {
@@ -22,5 +20,5 @@ CONFIG
 
 chown -R node:node /home/node/.openclaw
 
-# Démarrer
-exec npx openclaw start --gateway
+# Démarrer en tant que node
+exec su node -c "npx openclaw start --gateway"
