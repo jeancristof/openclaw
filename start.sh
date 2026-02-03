@@ -1,10 +1,11 @@
 #!/bin/bash
 
-# Créer le dossier config
+# Créer le dossier avec bonnes permissions
 mkdir -p /data/.openclaw
+chown -R node:node /data/.openclaw
 
-# Écrire la config
-cat > /data/.openclaw/openclaw.json << 'CONFIG'
+# Écrire la config en tant que node
+su node -c 'cat > /data/.openclaw/openclaw.json << CONFIG
 {
   "gateway": {
     "mode": "local"
@@ -15,17 +16,9 @@ cat > /data/.openclaw/openclaw.json << 'CONFIG'
       "dmPolicy": "allowlist",
       "allowFrom": ["1576473251"]
     }
-  },
-  "agents": {
-    "defaults": {
-      "maxConcurrent": 4
-    }
   }
 }
-CONFIG
-
-# Lier le dossier config
-export OPENCLAW_STATE_DIR=/data/.openclaw
+CONFIG'
 
 # Démarrer OpenClaw
-exec npx openclaw start --gateway
+exec su node -c "npx openclaw start --gateway"
